@@ -1,19 +1,31 @@
 # Arfa McClain
 
-Healthcare operations and interoperability. I build the layer around the EHR: intake and
-scheduling workflows, FHIR data exchange, and the governance and audit controls that make
-automation safe to put in front of clinical staff.
+Building [Novis](https://novis.study), a study platform for busy students on web, Windows, iPhone
+and iPad. It plans each day up to an exam, tutors, and builds flashcards from your own material.
+
+Before Novis, I built healthcare operations and interoperability projects: intake and scheduling
+workflows, FHIR data exchange, and the governance and audit controls that make automation safe to
+put in front of clinical staff.
 
 M.S. Health Administration, Georgia State University. B.S. Biology, Georgia Gwinnett College.
 Previously a medical scribe and a clinical volunteer at a nonprofit safety-net clinic, which is
 where the interest in operations started.
 
-Everything public here uses synthetic data on public sandboxes. No PHI, and nothing here is a
-production EHR integration.
+---
+
+## Building now
+
+**[Novis](https://novis.study)** ([downloads](https://github.com/belowthestack/novis-downloads))
+Shipped study application with paid plans. Web, Electron desktop, and iPhone and iPad apps on the
+App Store. Supabase, Stripe, spaced repetition, AI-generated decks, and a 3D knowledge graph.
+Scoped, built, deployed, and security red-teamed solo. Source is private.
 
 ---
 
-## Selected work
+## Earlier work: healthcare operations
+
+Every project in this section uses synthetic data on public sandboxes. No PHI, and nothing here
+is a production EHR integration.
 
 **[epic-result-triage](https://github.com/belowthestack/epic-result-triage)**
 SMART-on-FHIR result worklist tested against Epic's public sandbox. OAuth2 with PKCE,
@@ -37,14 +49,7 @@ positioning were rebuilt around the corrected finding.
 **[safe-scraper](https://github.com/belowthestack/safe-scraper)**
 Web scraper with built-in credibility-risk detection for signal manipulation.
 
-**[Novis](https://novis.study)** ([downloads](https://github.com/belowthestack/novis-downloads))
-Shipped, paid study application. Electron desktop and web, Supabase, Stripe, spaced repetition,
-AI-generated decks, and a 3D knowledge graph. Scoped, built, deployed, and security red-teamed
-solo. Source is private.
-
----
-
-## How I work
+### How I built these
 
 - **Human in the loop on anything clinical.** The systems surface eligibility, missing
   documentation, and risk. Licensed people stay the decision-makers.
@@ -53,6 +58,8 @@ solo. Source is private.
 - **BAA and PHI boundaries checked before a tool goes near patient data**, and stated plainly
   when a tool is demo-only.
 - **Documented for handoff.** A system nobody on staff can operate is a system that quietly dies.
+
+---
 
 ## Stack
 
