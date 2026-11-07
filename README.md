@@ -1,70 +1,81 @@
 # Arfa McClain
 
-Building [Novis](https://novis.study), a study platform for busy students on web, Windows, iPhone
-and iPad. It plans each day up to an exam, tutors, and builds flashcards from your own material.
-
-Before Novis, I built healthcare operations and interoperability projects: intake and scheduling
-workflows, FHIR data exchange, and the governance and audit controls that make automation safe to
-put in front of clinical staff.
+I build healthcare workflow automation: document intake, payer rules, care-coordination tracking, and
+the governance that makes AI safe to put in front of clinical staff. Most recently I shipped
+[Novis](https://novis.study), a study platform on web, Windows, iPhone, and iPad.
 
 M.S. Health Administration, Georgia State University. B.S. Biology, Georgia Gwinnett College.
-Previously a medical scribe and a clinical volunteer at a nonprofit safety-net clinic, which is
-where the interest in operations started.
+Former medical scribe and safety-net clinic volunteer, and nine years managing operations for a
+small service business.
 
 ---
 
-## Building now
+## Healthcare automation
 
-**[Novis](https://novis.study)** ([downloads](https://github.com/belowthestack/novis-downloads))
-Shipped study application with paid plans. Web, Electron desktop, and iPhone and iPad apps on the
-App Store. Supabase, Stripe, spaced repetition, AI-generated decks, and a 3D knowledge graph.
-Scoped, built, deployed, and security red-teamed solo. Source is private.
+Builds below use synthetic data. No PHI, and nothing here is a production EHR integration.
 
----
+**Clinical lab fax intake** ([live demo](https://arfa-lab-ops.pages.dev/?live=0))
+Prototyped in Make.com, rebuilt on self-hosted n8n with Claude on AWS Bedrock and NocoDB (SQL) so
+patient data only touches BAA-eligible services. AI vision reads faxed orders into structured fields
+with confidence scores, low-confidence reads go to a human review queue, idempotency keys block
+duplicate orders, failures land in a dead-letter queue with alerts, and every step writes to an
+append-only audit log with no medical values. Custom AWS SigV4 request signing inside n8n; a Python
+harness proves a replayed fax creates exactly one order.
 
-## Earlier work: healthcare operations
+**ABA operations layer** ([live demo](https://aba-ops-layer.pages.dev/app.html))
+Deterministic, explainable rules (not AI) on top of EHR exports: authorization unit-burn
+forecasting, BACB supervision monitoring, waitlist-to-provider matching, cancellation backfill, and
+payer contract tracking.
 
-Every project in this section uses synthetic data on public sandboxes. No PHI, and nothing here
-is a production EHR integration.
+**[aba-note-risk-checker](https://github.com/belowthestack/aba-note-risk-checker)** ([live demo](https://safetylayer-mvp.pages.dev))
+Payer-aware rules engine that flags ABA session-note documentation risk before the BCBA signs. A
+self-directed red team disproved the original premise, and the tool was rebuilt around the finding.
+
+**Chronic care management engine**
+Eight n8n workflows that read problem lists and coverage over FHIR, track monthly care minutes, and
+block billing until consent, a signed care plan, and the time requirement are met. AI time is never
+billable, and a person approves every claim.
 
 **[epic-result-triage](https://github.com/belowthestack/epic-result-triage)**
-SMART-on-FHIR result worklist tested against Epic's public sandbox. OAuth2 with PKCE,
-authenticated FHIR R4 reads, explainable ranking of clinical results, a mandatory human approval
-step, and a SHA-256 audit chain.
+SMART-on-FHIR worklist tested against Epic's public sandbox: OAuth2 with PKCE, FHIR R4 reads,
+explainable ranking, a mandatory human approval step, and a SHA-256 audit chain.
 
 **[voice-ops-core](https://github.com/belowthestack/voice-ops-core)**
-Governance and audit layer for healthcare voice AI. A tool-policy gateway that validates and
-refuses unsafe model tool calls before any side effect, an append-only audit trail, and an
-evaluation harness.
+Governance layer for healthcare voice AI: a tool-policy gateway that refuses unsafe tool calls
+before any side effect, an append-only audit trail, and an evaluation harness.
 
 **[fhir-ops-layer](https://github.com/belowthestack/fhir-ops-layer)**
-Standards-based FHIR R4 connector. Recall and retention scoring, US Core conformance pre-check,
-and SMART Backend Services against public sandboxes.
-
-**[aba-note-risk-checker](https://github.com/belowthestack/aba-note-risk-checker)**
-Single-page, no-backend rules engine that flags payer-specific documentation risk in ABA session
-notes. A self-directed red team disproved the original premise, and both the tool and its
-positioning were rebuilt around the corrected finding.
-
-**[safe-scraper](https://github.com/belowthestack/safe-scraper)**
-Web scraper with built-in credibility-risk detection for signal manipulation.
-
-### How I built these
-
-- **Human in the loop on anything clinical.** The systems surface eligibility, missing
-  documentation, and risk. Licensed people stay the decision-makers.
-- **Auditable by default.** Append-only logging, idempotency keys, and a real approval step
-  rather than a log line after the fact.
-- **BAA and PHI boundaries checked before a tool goes near patient data**, and stated plainly
-  when a tool is demo-only.
-- **Documented for handoff.** A system nobody on staff can operate is a system that quietly dies.
+Standards-based FHIR R4 connector: recall scoring, US Core conformance pre-check, and SMART Backend
+Services against public sandboxes.
 
 ---
+
+## Shipped products
+
+**[Novis](https://novis.study)** ([downloads](https://github.com/belowthestack/novis-downloads))
+Study platform with paid plans, live on the App Store and the web. OCR and document AI for PDFs and
+handwriting, FSRS spaced repetition, Postgres with row-level security, verified Stripe webhooks,
+AI routing with provider failover, validators on AI output, and 8,000+ automated tests. Source is
+private.
+
+**Gym CRM and lead automation** (in daily use, source private)
+Replaced a paid CRM with a custom React + TypeScript + MySQL app and n8n automations: Facebook Lead
+Ads API and website webhooks, rule-based routing with logged decisions, Telegram and email alerts,
+nurture sequences, and signature-tracked waivers with approved follow-ups.
+
+---
+
+## How I build
+
+- **Human in the loop on anything clinical or financial.** AI drafts; rules decide; people approve.
+- **Auditable by default.** Append-only logs, idempotency keys, dead-letter queues, alerts on failure.
+- **BAA and PHI boundaries first.** Patient data only goes to BAA-covered services; secrets stay out of git.
+- **Documented for handoff.** Runbooks, build logs, and plain-language guides for staff.
 
 ## Stack
 
-Python · JavaScript / TypeScript · SQL · FHIR R4 · US Core · SMART-on-FHIR · HL7 v2 · n8n ·
-Supabase · Electron · Cloudflare Workers
+TypeScript · JavaScript · React · SQL (Postgres, MySQL) · Python · n8n · FHIR R4 · SMART-on-FHIR ·
+AWS Bedrock · Supabase · Stripe · Cloudflare · Vercel · DigitalOcean
 
 ## Contact
 
