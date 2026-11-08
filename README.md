@@ -34,7 +34,7 @@ where patient data is allowed to go, what has to be audited, and what a person m
 learning builds and pilots on synthetic data, so the focus is the architecture and the controls, not
 polished UI. No PHI, and nothing here is a production EHR integration.
 
-**Clinical lab fax intake** (source private; [video walkthrough](https://youtu.be/S2JZgYhIlCU?t=19))
+**Clinical lab fax intake** ([source](https://github.com/belowthestack/fax-denial-routing); [live dashboard](https://belowthestack.github.io/fax-denial-routing/); [video walkthrough](https://youtu.be/S2JZgYhIlCU?t=19))
 Prototyped in Make.com, then rebuilt on self-hosted n8n with Claude on AWS Bedrock and NocoDB (SQL), so
 the AI and database steps use BAA-eligible services (production would also need a fax provider that signs
 a BAA). n8n pulls new faxes from the Faxage API, AI vision reads each order into structured fields with
