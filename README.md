@@ -34,13 +34,14 @@ where patient data is allowed to go, what has to be audited, and what a person m
 learning builds and pilots on synthetic data, so the focus is the architecture and the controls, not
 polished UI. No PHI, and nothing here is a production EHR integration.
 
-**Clinical lab fax intake** ([source](https://github.com/belowthestack/fax-denial-routing); [live dashboard](https://fax-denial-routing.pages.dev/); [video walkthrough](https://youtu.be/S2JZgYhIlCU?t=19))
-Prototyped in Make.com, then rebuilt on self-hosted n8n with Claude on AWS Bedrock and NocoDB (SQL), so
-the AI and database steps use BAA-eligible services (production would also need a fax provider that signs
-a BAA). n8n pulls new faxes from the Faxage API, AI vision reads each order into structured fields with
-confidence scores, low-confidence reads go to a person for review, idempotency keys block duplicate
-orders, failures alert staff, and every step writes to an append-only audit log with no medical values.
-A Python test proves a replayed fax creates exactly one order.
+**Fax intake and denial routing** ([source](https://github.com/belowthestack/fax-denial-routing); [live dashboard](https://fax-denial-routing.pages.dev/); [video walkthrough](https://youtu.be/S2JZgYhIlCU?t=19))
+Started as a fax intake pilot for a clinical lab (prototyped in Make.com, rebuilt on n8n), now rebuilt as a
+pilot on synthetic payer letters. It reads each faxed letter, decides whether it is an approval, a full
+denial, a partial denial, or not a payer letter, and routes denials to work queues by reason. Two Claude
+models on AWS Bedrock read each page independently and must agree, a deterministic rules layer makes every
+decision and cites the rule that fired, anything uncertain goes to a person, and nothing is sent until a
+person approves it. Duplicate faxes are blocked before any model call, failures are kept and retried, and
+an append-only audit log stores no medical values. Tests replay real captured model outputs.
 
 **ABA operations layer**
 Deterministic, explainable rules (not AI) on top of EHR exports: authorization unit-burn
